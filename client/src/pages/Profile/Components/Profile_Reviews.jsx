@@ -20,7 +20,7 @@ export const Profile_Reviews = () => {
           let products = [];
           if (billsByUser) {
             const billsSuccesfull = billsByUser
-              .filter((e) => e.status == "succesfull")
+              .filter((e) => e.status == "received")
               .map((e) => e.data)
               .flat();
             const uniqueObjetos = {};

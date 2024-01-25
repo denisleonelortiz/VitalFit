@@ -36,8 +36,6 @@ const UserContext = ({ children }) => {
         const user = await getUser(userFirebase?.uid);
         const bills = await getAllBills();
 
-        console.log(user);
-
         if (user) {
           setUser(user);
           setIsRegistered(true);
@@ -68,6 +66,8 @@ const UserContext = ({ children }) => {
             displayName: currentUser.displayName,
           });
           setIsRegistered(true);
+          const fetch = await getUser(currentUser.uid);
+          setUser(fetch);
         }
       }
       setLoading(false);

@@ -31,6 +31,7 @@ const Order = () => {
       if (currentUser) {
         const fetch = await getUser(currentUser?.uid);
         setUser(fetch);
+        console.log(fetch);
       }
     };
     fetchUser();
@@ -115,10 +116,12 @@ const Order = () => {
       };
     });
 
-  console.log(user);
-
   const handlePay = async () => {
-    if (!currentUser) navigate("/auth/loginUser");
+    if (!currentUser) {
+      navigate("/auth/loginUser");
+      setShowCart(false);
+      setShowOrder(false);
+    }
 
     if (user?.dataCompleted) {
       setItemsToPay(arrayItems);
@@ -138,9 +141,12 @@ const Order = () => {
       setDisabled(true);
       return;
     }
-    navigate("/preCheckout");
-    setShowCart(false);
-    setShowOrder(false);
+
+    if (currentUser) {
+      navigate("/preCheckout");
+      setShowCart(false);
+      setShowOrder(false);
+    }
   };
 
   const handleBack = () => {

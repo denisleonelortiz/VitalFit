@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { Loading } from "../../components/Loading/Loading";
 
 const PreCheckout = () => {
-  const { currentUser, user, loading, setShowOrder } = useContext(userAuth);
+  const { currentUser, user, setShowOrder } = useContext(userAuth);
   const [provincias, setProvincias] = useState([]);
   const [municipios, setMunicipios] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -17,10 +18,11 @@ const PreCheckout = () => {
         "https://apis.datos.gob.ar/georef/api/provincias"
       );
       setProvincias(data.provincias);
+      if (currentUser) setLoading(false);
     }
     fetchData();
-  }, []);
-  const navigate = useNavigate();
+  }, [currentUser, user]);
+
   const {
     getValues,
     register,
@@ -41,12 +43,15 @@ const PreCheckout = () => {
     setMunicipios(data.municipios);
   };
 
-  //si user ya tiene data registrada, trae los municipios de acuerdo a la provincia guardada en bdd
-  if (!loading) {
-    if (user.dataCompleted) {
-      if (!municipios.length) handleMunicipios(provincia);
+  useEffect(() => {
+    if (!loading) {
+      if (user.dataCompleted) {
+        if (!municipios.length) handleMunicipios(provincia);
+      }
     }
-  }
+  }, [user, currentUser]);
+
+  //si user ya tiene data registrada, trae los municipios de acuerdo a la provincia guardada en bdd
 
   const handleData = async (data) => {
     if (data) {
@@ -86,7 +91,7 @@ const PreCheckout = () => {
                     value: 15,
                     message: "Debe tener menos de 15 caracteres",
                   },
-                  value: user.documento || "",
+                  value: user?.documento || "",
                 })}
                 type="text"
                 className={`p-1.5 w-72 font-montserrat border-x-transparent  border-t-transparent border-b-2 focus:ring-0 focus:border-transparent focus:border-b-red-500${
@@ -114,7 +119,7 @@ const PreCheckout = () => {
                     value: /^\+\d{1,3}\s?\d{4,}$/,
                     message: "Numero de telfono invalido",
                   },
-                  value: user.telefono || "",
+                  value: user?.telefono || "",
                 })}
                 type="text"
                 className={`p-1.5 w-72 font-montserrat  border-x-transparent  border-t-transparent border-b-2 focus:ring-0 focus:border-transparent focus:border-b-red-500${
@@ -138,7 +143,7 @@ const PreCheckout = () => {
                     value: true,
                     message: "El campo es obligatorio",
                   },
-                  value: user.provincia || "",
+                  value: user?.provincia || "",
                 })}
                 onChange={handleProvincias}
                 className="border-x-transparent border-t-transparent border-b-2 w-72 font-montserrat focus:ring-0 focus:border-transparent focus:border-b-red-500">
@@ -168,7 +173,7 @@ const PreCheckout = () => {
                     value: true,
                     message: "El campo es obligatorio",
                   },
-                  value: user.municipio || "",
+                  value: user?.municipio || "",
                 })}
                 className="border-x-transparent border-t-transparent border-b-2 w-72 font-montserrat focus:ring-0 focus:border-transparent focus:border-b-red-500">
                 <option value="Elige un municipio" disabled>
@@ -207,7 +212,7 @@ const PreCheckout = () => {
                     value: 25,
                     message: "Debe tener menos de 25 caracteres",
                   },
-                  value: user.ciudad || "",
+                  value: user?.ciudad || "",
                 })}
                 type="text"
                 className={`p-1.5 w-72 font-montserrat  border-x-transparent  border-t-transparent border-b-2 focus:ring-0 focus:border-transparent focus:border-b-red-500${
@@ -239,7 +244,7 @@ const PreCheckout = () => {
                       /^[A-Za-z0-9äÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s\-,#.]+$/,
                     message: "Calle inválida",
                   },
-                  value: user.calle || "",
+                  value: user?.calle || "",
                 })}
                 type="text"
                 className={`p-1.5 w-72 font-montserrat  border-x-transparent  border-t-transparent border-b-2 focus:ring-0 focus:border-transparent focus:border-b-red-500${
@@ -271,7 +276,7 @@ const PreCheckout = () => {
                     value: /^[A-Za-z0-9\s\-,#.]+$/,
                     message: "Altura de calle inválida",
                   },
-                  value: user.altura || "",
+                  value: user?.altura || "",
                 })}
                 type="text"
                 className={`p-1.5 w-72 font-montserrat  border-x-transparent  border-t-transparent border-b-2 focus:ring-0 focus:border-transparent focus:border-b-red-500${
@@ -294,7 +299,7 @@ const PreCheckout = () => {
                     value: /^[A-Za-z0-9\s\-,#.]+$/,
                     message: "Piso / dpto inválido",
                   },
-                  value: user.pisoDpto || "",
+                  value: user?.pisoDpto || "",
                 })}
                 type="text"
                 className={`p-1.5 w-72 font-montserrat  border-x-transparent  border-t-transparent border-b-2 focus:ring-0 focus:border-transparent focus:border-b-red-500${

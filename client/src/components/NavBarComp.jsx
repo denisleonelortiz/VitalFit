@@ -14,8 +14,7 @@ import ReviewsIcon from "../icons/ReviewsIcon";
 
 export const NavBarComp = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector(state => state.auth)
-  console.log(user);
+  const { user } = useSelector((state) => state.auth);
 
   const {
     currentUser,
@@ -28,10 +27,10 @@ export const NavBarComp = () => {
     setProducts,
     isRegistered,
   } = useContext(userAuth);
-  console.log(isRegistered);
 
   const logOut = async () => {
-    dispatch(getLogout());
+    //dispatch(getLogout());
+    await logOutUser();
     setCurrentUser(null);
     setProductsLocalStorage([]);
     setProducts([]);
@@ -77,16 +76,15 @@ export const NavBarComp = () => {
           </NavLink>
         </section>
         <section className="flex gap-2 w-[195px]">
-
-          {
-            !user.displayName ?
+          {!currentUser ? (
             <NavLink to={"auth/loginPage"}>
               <UserIcon
                 className={
                   "w-10 transition fill-primaryDark hover:scale-125 hover:fill-primary"
                 }
               />
-            </NavLink> :
+            </NavLink>
+          ) : (
             <BiLogOutCircle
               onClick={logOut}
               style={{
@@ -98,11 +96,9 @@ export const NavBarComp = () => {
                 "w-10 transition fill-primaryDark hover:scale-125 hover:fill-primary cursor-pointer"
               }
             />
+          )}
 
-          }
-          
-
-          {user.displayName && <ReviewsIcon />}
+          {currentUser && <ReviewsIcon />}
 
           {/*  <button onClick={() => onShopList()} className="relative">
             <ShoppingCartIcon
