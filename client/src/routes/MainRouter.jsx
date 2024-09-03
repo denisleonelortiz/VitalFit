@@ -7,6 +7,7 @@ import { getCategories, getProducts } from "../store/slices";
 import { useSelector } from "react-redux";
 import { AdminRoutes } from "./AdminRoutes";
 import { Home } from "../pages";
+import data from "../Data"
 
 export const MainRouter = () => {
   const { status, user } = useSelector((state) => state.auth);
@@ -14,7 +15,7 @@ export const MainRouter = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProducts());
+    dispatch(getProducts(data));
     dispatch(getCategories());
   }, [dispatch]);
 
