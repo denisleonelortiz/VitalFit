@@ -2,44 +2,45 @@ const { Product, Category } = require("../db");
 const json = require("../data.json");
 
 async function postProducts() {
-  const products = await Promise.all(
-    json.map(
-      async ({
-        name,
-        price,
-        size,
-        stock,
-        image,
-        flavour,
-        category,
-        pre_description,
-        description,
-        dose,
-      }) => {
-        const newProduct = await Product.create({
-          name,
-          price,
-          size,
-          stock,
-          image,
-          flavour,
-          pre_description,
-          description,
-          dose,
-        });
 
-        const [categoryDb, categoryCreated] = await Category.findOrCreate({
-          where: { name: category },
-        });
+    const products = await Promise.all(
+        json.map(
+            async ({
+                name,
+                price,
+                size,
+                stock,
+                image,
+                flavour,
+                category,
+                pre_description,
+                description,
+                dose,
+            }) => {
+                const newProduct = await Product.create({
+                    name,
+                    price,
+                    size,
+                    stock,
+                    image,
+                    flavour,
+                    pre_description,
+                    description,
+                    dose,
+                });
 
-        await newProduct.setCategory(categoryDb);
+                const [categoryDb, categoryCreated] = await Category.findOrCreate({
+                    where: { name: category },
+                });
 
-        return newProduct;
-      }
-    )
-  );
+                await newProduct.setCategory(categoryDb);
 
-  return products;
+                return newProduct;
+            }
+        )
+    );
+
+    return products;
 }
 
 module.exports = postProducts;

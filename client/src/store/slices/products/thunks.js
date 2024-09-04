@@ -18,28 +18,37 @@ import {
 } from "./productSlice";
 //import { filters } from "./productSlice";
 
-export const getProducts = (products, page = 1) => {
+export const loadDB =  () => {
+    return async () => {
+        const {data} = await productsIns.post("/many")
+        return data
+
+    }
+}
+
+
+export const getProducts = ( page = 1) => {
   return async (dispatch, getState) => {
     dispatch(startLoading());
 
-    // const { filters, search, sorts } = getState().product;
-    // const { category, minPrice, maxPrice } = filters;
-    // const { sortByName, sortByPrice } = sorts;
+    const { filters, search, sorts } = getState().product;
+    const { category, minPrice, maxPrice } = filters;
+    const { sortByName, sortByPrice } = sorts;
 
-    // const { data } = await productsIns.get("/", {
-    //   params: {
-    //     search,
-    //     category,
-    //     minPrice,
-    //     maxPrice,
-    //     sortByName,
-    //     sortByPrice,
-    //   },
-    // });
-    dispatch(setProducts(products));
+    const { data } = await productsIns.get("/", {
+      params: {
+        search,
+        category,
+        minPrice,
+        maxPrice,
+        sortByName,
+        sortByPrice,
+      },
+    });
+    dispatch(setProducts(data));
     
     dispatch(setCurrentPage(page));
-    return products;
+    return data;
   };
 };
 

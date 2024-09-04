@@ -66,7 +66,7 @@ export default function ProductsPage() {
         )}
 
         {filtered.length > 0 && (
-          <section className="flex items-center justify-center gap-2 mr-5 mb-5">
+          <section className="flex items-center justify-center gap-2 mr-5 mb-5 mt-8">
             <button
               onClick={handlePreviousPage}
               className="font-bebas p-2 hover:text-primary">

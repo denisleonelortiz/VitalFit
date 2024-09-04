@@ -3,11 +3,11 @@ import { Navigate, Route, useLocation, Routes } from "react-router-dom";
 import { AppRouter, AuthRoutes } from "./";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
-import { getCategories, getProducts } from "../store/slices";
+import { getCategories, getProducts, loadDB } from "../store/slices";
 import { useSelector } from "react-redux";
 import { AdminRoutes } from "./AdminRoutes";
-import { Home } from "../pages";
-import data from "../Data"
+import { productsIns } from "../api";
+
 
 export const MainRouter = () => {
   const { status, user } = useSelector((state) => state.auth);
@@ -15,7 +15,18 @@ export const MainRouter = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getProducts(data));
+    const loadDatabase = async () => {
+        try {
+          // Realiza una solicitud POST a la ruta /many
+          const response = await productsIns.post('/many');
+          console.log('Base de datos cargada:', response.data);
+        } catch (error) {
+          console.error('Error al cargar la base de datos:', error);
+        }
+      };
+  
+      loadDatabase();
+    dispatch(getProducts());
     dispatch(getCategories());
   }, [dispatch]);
 
