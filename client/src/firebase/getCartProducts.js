@@ -14,7 +14,9 @@ const getCartProducts = async (uid) => {
     } else {
       return [];
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 };
 
 export default getCartProducts;

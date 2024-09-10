@@ -2,7 +2,8 @@ const { Product, Category } = require("../db");
 const json = require("../data.json");
 
 async function postProducts() {
-
+    console.log(json);
+    
     const products = await Promise.all(
         json.map(
             async ({
