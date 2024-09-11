@@ -7,14 +7,10 @@ const server = express();
 
 server.use(morgan("dev"));
 server.use(express.json());
-server.use(cors({
-    origin:
-        'http://localhost:5173'
+server.use(cors({ origin: 
+      "*"
     ,
-    methods: ["GET", "POST", "PUT", "DELETE"]
-    ,
-    credentials: true
-}));
+    methods: ["GET", "POST", "PUT", "DELETE"] }));
 
 
 server.use("/", router);
