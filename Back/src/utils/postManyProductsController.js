@@ -1,48 +1,114 @@
 const { Product, Category } = require("../db");
 const json = require("../data.json");
 
-async function postProducts() {
-    console.log(json);
+// async function postProducts() {
+//     console.log(json);
     
-    const products = await Promise.all(
-        json.map(
-            async ({
-                name,
-                price,
-                size,
-                stock,
-                image,
-                flavour,
-                category,
-                pre_description,
-                description,
-                dose,
-            }) => {
-                const newProduct = await Product.create({
+//     const products = await Promise.all(
+//         json.map(
+//             async ({
+//                 name,
+//                 price,
+//                 size,
+//                 stock,
+//                 image,
+//                 flavour,
+//                 category,
+//                 pre_description,
+//                 description,
+//                 dose,
+//             }) => {
+//                 const newProduct = await Product.create({
+//                     name,
+//                     price,
+//                     size,
+//                     stock,
+//                     image,
+//                     flavour,
+//                     pre_description,
+//                     description,
+//                     dose,
+//                 });
+
+//                 const [categoryDb, categoryCreated] = await Category.findOrCreate({
+//                     where: { name: category },
+//                 });
+
+//                 await newProduct.setCategory(categoryDb);
+
+//                 return newProduct;
+//             }
+//         )
+//     );
+
+//     return products;
+// }
+
+async function postProducts() {
+    try {
+        // Verificar si la tabla de productos está vacía
+        const productCount = await Product.count();
+        console.log(`cantidad de productos en bd ${productCount}`)
+        
+        
+        
+        if (productCount > 0) {
+            console.log('La base de datos ya tiene productos.');
+            return; // Salimos de la función si ya hay productos
+        }
+
+        console.log('Base de datos vacía, insertando productos...');
+
+        // Si está vacía, insertar productos
+        const products = await Promise.all(
+            json.map(
+                async ({
                     name,
                     price,
                     size,
                     stock,
                     image,
                     flavour,
+                    category,
                     pre_description,
                     description,
                     dose,
-                });
+                }) => {
+                    // Crear nuevo producto
+                    const newProduct = await Product.create({
+                        name,
+                        price,
+                        size,
+                        stock,
+                        image,
+                        flavour,
+                        pre_description,
+                        description,
+                        dose,
+                    });
 
-                const [categoryDb, categoryCreated] = await Category.findOrCreate({
-                    where: { name: category },
-                });
+                    // Buscar o crear la categoría
+                    const [categoryDb, categoryCreated] = await Category.findOrCreate({
+                        where: { name: category },
+                    });
 
-                await newProduct.setCategory(categoryDb);
+                    // Asignar categoría al producto
+                    await newProduct.setCategory(categoryDb);
 
-                return newProduct;
-            }
-        )
-    );
+                    return newProduct;
+                }
+            )
+        );
 
-    return products;
+        console.log('Productos insertados correctamente.');
+        return products;
+
+    } catch (error) {
+        console.error('Error al insertar productos:', error);
+        throw error; // Propaga el error para que pueda ser manejado fuera de la función si es necesario
+    }
 }
+
 
 module.exports = postProducts;
 
