@@ -46,19 +46,6 @@ const json = require("../data.json");
 
 async function postProducts() {
     try {
-        // Verificar si la tabla de productos está vacía
-        const productCount = await Product.count();
-        console.log(`cantidad de productos en bd ${productCount}`)
-        
-        
-        
-        if (productCount > 0) {
-            console.log('La base de datos ya tiene productos.');
-            return; // Salimos de la función si ya hay productos
-        }
-
-        console.log('Base de datos vacía, insertando productos...');
-
         // Si está vacía, insertar productos
         const products = await Promise.all(
             json.map(

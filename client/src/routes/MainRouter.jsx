@@ -17,8 +17,9 @@ export const MainRouter = () => {
         const loadDatabase = async () => {
           try {
             // Verifica si los datos ya están cargados en la base de datos
-            const response = await productsIns.get('/'); // Ruta que verifica el estado de la BD
-            if (response.data.isEmpty) {
+            const response = await productsIns.get('/');
+             // Ruta que verifica el estado de la BD
+            if (!response.data.length) {
               // Si la base de datos está vacía, inserta los datos
               const insertResponse = await productsIns.post('/many', {
                 // Datos iniciales para poblar la BD

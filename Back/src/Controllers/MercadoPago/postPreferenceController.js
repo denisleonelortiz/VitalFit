@@ -14,9 +14,9 @@ const postPreference = async ({ userId, userEmail, items, orderId }) => {
       },
     ], */ items,
     back_urls: {
-      success: "http://localhost:5173/checkout/successfull",
-      failure: "http://localhost:5173/home",
-      pending: "http://localhost:5173/home",
+      success: "http://vitalfit-zeta.vercel.app/checkout/successfull",
+      failure: "https://vitalfit-zeta.vercel.app/home",
+      pending: "https://vitalfit-zeta.vercel.app/home",
     },
     external_reference: orderId + "-_" + userId + "-_" + userEmail,
     auto_return: "approved",
